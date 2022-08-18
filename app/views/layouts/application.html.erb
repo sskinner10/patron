@@ -6,21 +6,31 @@
   <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= csrf_meta_tags %>
 </head>
-<body>
-  
-  <nav class="top-bar">
-    <h1><a href="/">Patron</a></h1>
+<body class="body-text">
 
-    <section class="top-bar-section">
-      <ul class="right">
-        <%- if current_user -%>
-          <li><%= link_to 'Sign Out', destroy_user_session_path, method: :delete %></li>
-        <%- else -%>
-          <li><%= link_to 'Sign Up', new_user_registration_path %></li>
-          <li><%= link_to 'Sign In', new_user_session_path %></li>
-        <%- end -%>
-      </ul>
-    </section>
+  <div class="title-bar" data-responsive-toggle="navigation-bar" data-hide-for="medium">
+    <button class="menu-icon" type="button" data-toggle="navigation-bar"></button>
+    <div class="title-bar-title">Patron</div>
+  </div>
+
+  <nav data-sticky-container>
+    <div class="top-bar header-nav" id="navigation-bar" data-sticky data-margin-top="0">
+      <div class="top-bar-left">
+        <ul class="vertical medium-horizontal menu">
+          <li><h1 class="header-title-text"><%= link_to 'Patron', root_path, class: "top-bar-text" %></h1></li>
+        </ul>
+      </div>
+      <div class="top-bar-right">
+        <ul class="vertical medium-horizontal menu">
+          <%- if current_user -%>
+            <li><%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: "top-bar-text" %></li>
+          <%- else -%>
+            <li><%= link_to 'Sign Up', new_user_registration_path, class: "top-bar-text" %></li>
+            <li><%= link_to 'Sign In', new_user_session_path, class: "top-bar-text" %></li>
+          <%- end -%>
+        </ul>
+      </div>
+    </div>
   </nav>
 
   <%- flash.each do |key, value| -%>
@@ -28,7 +38,7 @@
       <%= value %>
     </div>
   <%- end -%>
-
+  
   <%= yield %>
 
   <%= javascript_include_tag 'application' %>
@@ -41,5 +51,17 @@
   <%= javascript_pack_tag 'application' %>
   
   <%= yield :extra_footer %>
+  <footer class="footer-nav">
+    <div class="grid-x">
+      <div class="cell small-12 medium-4 footer-header">
+        <h4 class="header-title-text">About the Developer</h4>
+      
+      </div>
+      <div class="cell small-12 medium-4 footer-header">
+        <h4 class="header-title-text">Patron Home</h4>
+
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

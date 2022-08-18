@@ -15,3 +15,72 @@
  *= require foundation_and_overrides
 
  */
+ @import url('https://fonts.googleapis.com/css2?family=Comfortaa&family=Lobster&display=swap');
+
+body {
+  font-family: 'Comfortaa', cursive;
+  min-height: 100vh; 
+  margin: 0; 
+  display: flex;
+  flex-direction: column;
+}
+
+.center-form {
+  padding-bottom: 3em;
+}
+
+.center-header {
+   text-align: center;
+}
+
+.footer-nav {
+  margin-top: auto;
+  width: 100%;
+  background-color: #db0007;
+  color: #ffffff;
+  text-align: center;
+}
+
+.header-title-text {
+  font-family: 'Lobster', cursive;
+}
+
+.home-page-container {
+   flex-grow: 1;
+   background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), 
+     url("chris-liverani-oCsaxvGCehM-unsplash.jpg");
+   background-size: cover;
+   color: #ffffff;
+}
+
+.home-page-text {
+  width: 20em;
+}
+
+.home-page-tile {
+  margin: 3em 0;
+  background-color: #db0007;
+  background: linear-gradient(#db0007, #ef0107);
+}
+
+.radius {
+  border-radius: .5em;
+}
+
+.title-bar {
+  background-color: #db0007;
+}
+
+.top-bar{
+  background-color: #db0007;
+}
+
+.top-bar ul {
+  background-color: #db0007;
+}
+
+.top-bar-text {
+  color: #ffffff;
+  font-family: 'Lobster', cursive;
+}
+
