@@ -2,17 +2,19 @@ import React, { useEffect, useRef, useState } from "react"
 import _ from "lodash"
 
 import ErrorDisplay from "./ErrorDisplay"
+import { Redirect } from "react-router-dom"
 
 const blankReviewForm = {
     title:"",
     rating:"",
     body:"",
-    place:""
+    placeId:""
 }
 
 const RestaurantSelect = (props) => {
     const [newReview, setNewReview] = useState(blankReviewForm)
     const [errors, setErrors] = useState({})
+    const [redirectUser, setRedirectUser] = useState(null)
     const autoCompleteRef = useRef();
     const inputRef = useRef();
     const options = {
@@ -29,7 +31,7 @@ const RestaurantSelect = (props) => {
             const place = await autoCompleteRef.current.getPlace();
             setNewReview({
                 ...newReview,
-                place: place.place_id
+                placeId: place.place_id
             })
         })
     }, [])
@@ -44,7 +46,7 @@ const RestaurantSelect = (props) => {
 
     const validForSubmission = () => {
         let submitErrors = {}
-        const requiredFields = ["title", "rating", "body", "place"]
+        const requiredFields = ["title", "rating", "body", "placeId"]
         requiredFields.forEach(field => {
           if (newReview[field].trim() == "") {
             submitErrors = {
@@ -69,7 +71,12 @@ const RestaurantSelect = (props) => {
         }
     }
 
-    const postReview = async (formPayload) =>{
+    const postReview = async () =>{
+        formPayload = {
+          ...newReview,
+          place_id: placeId,
+          placeId: null
+        }
         try {
             const response = await fetch(`/api/v1/reviews`, {
             credentials: "same-origin",
@@ -85,63 +92,74 @@ const RestaurantSelect = (props) => {
             const error = new Error(errorMessage)
             throw(error)
             }
-            const reviewObject = await response.json()
-  
-            if (reviewObject.review) {
-                appendNewReview(reviewObject.review)
-            } else if (reviewObject.error) {
-                setErrors({'error: ': reviewObject.error})
-            }
+            const user = await response.json()
+            setRedirectUser(user.user)
         } catch(err) {
           console.log(`Error in fetch: ${err}`)
         }
   }
 
+  if (redirectUser) {
+      return <Redirect to={`/users/${redirectUser.id}`} />
+  }
+
     return (
       <form onSubmit={handleFormSubmit}>
-        <ErrorDisplay 
-          errors={errors}
-        />
-        <div>
-          <label>Find the restaurant you want to review:
-            <input ref={inputRef}/>
-          </label>
-          <label>
-            Title:
-            <input 
-              name="title"
-              id="title"
-              type="text"
-              onChange={handleChange}
-              value={newReview.title}
-            />
-          </label>
-          <label>
-            Rating:
-            <input 
-              name="rating"
-              id="rating"
-              type="number"
-              min="1"
-              max="5"
-              step="1"
-              onChange={handleChange}
-              value={newReview.rating}
-            />
-          </label>
-          <label>
-            Review:
-            <input 
-              name="body"
-              id="body"
-              type="text"
-              onChange={handleChange}
-              value={newReview.body}
-            />
-          </label>
+        <div className="grid-container">
+          <div className="grid-x grid-margin-x">
+            <div className="cell">
+              <ErrorDisplay 
+                errors={errors}
+              />
+            </div>
+            <div className="cell">
+              <label>Find the restaurant you want to review:
+                <input className="" type="text" name="placeId" id="placeId" ref={inputRef}/>
+              </label>
+            </div>
+            <div className="cell">
+              <label>
+                Title:
+                <input 
+                  name="title"
+                  id="title"
+                  type="text"
+                  onChange={handleChange}
+                  value={newReview.title}
+                />
+              </label>
+            </div>
+            <div className="cell">
+              <label>
+                Rating:
+                <input 
+                  name="rating"
+                  id="rating"
+                  type="number"
+                  min="1"
+                  max="5"
+                  step="1"
+                  onChange={handleChange}
+                  value={newReview.rating}
+                />
+              </label>
+            </div>
+            <div className="cell">
+              <label>
+                Review:
+                <input 
+                  name="body"
+                  id="body"
+                  type="text"
+                  onChange={handleChange}
+                  value={newReview.body}
+                />
+              </label>
+            </div>
+            
+            <input className="cell button" type="submit" value="Submit Review" />
+          </div>
         </div>
-        
-        <input className="button" type="submit" value="Submit Review" />
       </form>
     )
 }

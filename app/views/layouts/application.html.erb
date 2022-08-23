@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= csrf_meta_tags %>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiupSGv-RCTGTFZMiie4dvXPLK-77esL0&libraries=places"async></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV["GOOGLE_PLACES_KEY"] %>&libraries=places"async></script>
 </head>
 <body class="body-text">
 
@@ -24,6 +24,7 @@
       <div class="top-bar-right">
         <ul class="vertical medium-horizontal menu">
           <%- if current_user -%>
+            <li><%= link_to "See Your Home Page, #{current_user.patron_handle}", "/users/#{current_user.id}", class: "top-bar-text" %></li>
             <li><%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: "top-bar-text" %></li>
           <%- else -%>
             <li><%= link_to 'Sign Up', new_user_registration_path, class: "top-bar-text" %></li>
