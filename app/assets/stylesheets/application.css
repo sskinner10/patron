@@ -29,9 +29,10 @@ body {
   padding-bottom: 3em;
 }
 
-.center-header {
-   text-align: center;
+.center-element {
+  text-align: center;
 }
+
 
 .footer-nav {
   margin-top: auto;
@@ -43,6 +44,10 @@ body {
 
 .header-title-text {
   font-family: 'Lobster', cursive;
+}
+
+.header-show-page {
+  font-family: 'Comfortaa', cursive;
 }
 
 .home-page-container {

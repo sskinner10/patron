@@ -6,8 +6,7 @@ class Api::V1::ReviewsController < ApiController
     review.user_id = current_user[:id]
 
     if review.save
-      payload = {user: current_user}
-      render json: {review: payload}
+      render json: {user: current_user}
     else 
       render json: {error: review.errors.full_messages, status: :unprocessable_entity }
     end
@@ -22,6 +21,6 @@ class Api::V1::ReviewsController < ApiController
   end
 
   def review_params
-    params.require(:review).permit(:title, :rating, :heatIndex, :body)
+    params.require(:review).permit(:title, :rating, :body, :place_id)
   end
 end

@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  validates :patron_handle, presence: true, uniqueness: true, format: { without: /\s/ }
+
   has_many :reviews
   
 end

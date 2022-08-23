@@ -10,6 +10,11 @@
     </div>
 
     <div class="field cell">
+      <%= f.label :patron_handle, "Patron Handle" %><br />
+      <%= f.text_field :patron_handle %>
+    </div>
+
+    <div class="field cell">
       <%= f.label :password %>
       <% if @minimum_password_length %>
       <em>(<%= @minimum_password_length %> characters minimum)</em>
