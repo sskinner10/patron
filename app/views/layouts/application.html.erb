@@ -21,10 +21,15 @@
           <li><h1 class="header-title-text"><%= link_to 'Patron', root_path, class: "top-bar-text" %></h1></li>
         </ul>
       </div>
+      <div class="top-bar-left">
+        <ul class="vertical medium-horizontal menu">
+          <li class="top-bar-text"><%= link_to 'Find A User', class: "top-bar-text" %></li>
+        </ul>
+      </div>
       <div class="top-bar-right">
         <ul class="vertical medium-horizontal menu">
           <%- if current_user -%>
-            <li><%= link_to "See Your Home Page, #{current_user.patron_handle}", "/users/#{current_user.id}", class: "top-bar-text" %></li>
+            <li><%= link_to "Profile Page", "/users/#{current_user.id}", class: "top-bar-text" %></li>
             <li><%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: "top-bar-text" %></li>
           <%- else -%>
             <li><%= link_to 'Sign Up', new_user_registration_path, class: "top-bar-text" %></li>

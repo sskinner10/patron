@@ -16,7 +16,7 @@ class Api::V1::ReviewsController < ApiController
   
   def authenticate_user
     if !user_signed_in?
-      render json: {error: ["you must be signed in"]}
+      render json: {error: ["You need to be signed in first"]}
     end
   end
 

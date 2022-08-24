@@ -47,6 +47,8 @@ const UserShowPage = (props) => {
                     rating={review.rating}
                     body={review.body}
                     createdAt={review.created_at}
+                    name={review.name}
+                    placeId={review.place_id}
                 />
             </div>
         )
