@@ -33,11 +33,10 @@ body {
   text-align: center;
 }
 
-
 .footer-nav {
   margin-top: auto;
   width: 100%;
-  background-color: #db0007;
+  background-color: #0b4f6c;
   color: #ffffff;
   text-align: center;
 }
@@ -51,15 +50,25 @@ body {
 }
 
 .home-page-container {
-   flex-grow: 1;
-   background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), 
-     url("chris-liverani-oCsaxvGCehM-unsplash.jpg");
-   background-size: cover;
-   color: #ffffff;
+  flex-grow: 1;
+  background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), 
+    url("chris-liverani-oCsaxvGCehM-unsplash.jpg");
+  background-size: cover;
+  color: #ffffff;
+  height: 100vh;
+  width: 50vw
+}
+
+@media (max-width: 640px) {
+  .home-page-container {
+    width: 225px;
+  }
 }
 
 .home-page-text {
-  width: 20em;
+  width: 225px;
+  text-align: center;
+  margin: 0 auto;
 }
 
 .home-page-tile {
@@ -70,6 +79,16 @@ body {
 
 .radius {
   border-radius: .5em;
+}
+
+.review-tile-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.review-tile-restaurant {
+  margin: .5em 0;
 }
 
 .title-bar {

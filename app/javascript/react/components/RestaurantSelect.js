@@ -18,9 +18,9 @@ const RestaurantSelect = (props) => {
     const autoCompleteRef = useRef();
     const inputRef = useRef();
     const options = {
-        fields: ["place_id", "name"]
+        fields: ["place_id"]
     }
-  
+
     useEffect(() => {
         autoCompleteRef.current = new window.google.maps.places.Autocomplete(
         inputRef.current,
@@ -28,7 +28,7 @@ const RestaurantSelect = (props) => {
         )
 
         autoCompleteRef.current.addListener("place_changed", async function () {
-            const place = await autoCompleteRef.current.getPlace();
+            const place = await autoCompleteRef.current.getPlace()
             setNewReview({
                 ...newReview,
                 placeId: place.place_id
@@ -64,19 +64,19 @@ const RestaurantSelect = (props) => {
 
     const handleFormSubmit = (event) => {
         event.preventDefault()
-        
+
+        const formData = {
+          ...newReview,
+          place_id: newReview.placeId,
+        }
+
         if (validForSubmission()) {
-          postReview(newReview)
+          postReview(formData)
           setNewReview (blankReviewForm)
         }
     }
 
-    const postReview = async () =>{
-        formPayload = {
-          ...newReview,
-          place_id: placeId,
-          placeId: null
-        }
+    const postReview = async (formPayload) =>{
         try {
             const response = await fetch(`/api/v1/reviews`, {
             credentials: "same-origin",
@@ -92,8 +92,12 @@ const RestaurantSelect = (props) => {
             const error = new Error(errorMessage)
             throw(error)
             }
-            const user = await response.json()
-            setRedirectUser(user.user)
+            const responseBody = await response.json()
+            if (responseBody.user) {
+              setRedirectUser(responseBody.user)
+            } else if (responseBody.error[0] === "You need to be signed in first") {
+              location.assign("/users/sign_in")
+            }
         } catch(err) {
           console.log(`Error in fetch: ${err}`)
         }
