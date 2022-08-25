@@ -31,31 +31,43 @@ const RestaurantShow = (props) => {
         }
     }
 
-    const reviewTiles = restaurantReviews.map((review) => {
-        
-        return (
-            <div key={review.id}>
-                <ReviewTile
-                    reviewUserId={review.user_id}
-                    title={review.title}
-                    rating={review.rating}
-                    body={review.body}
-                    createdAt={review.created_at}
-                    placeId={review.place_id}
-                    userId={review.user_id}
-                    patronHandle={review.user_handle}
-                />
-            </div>
-        )
-    })
+    if (_.isEmpty(restaurantDetails)) {
+        return null
+    }
+
+    let reviewTiles
+    if (restaurantReviews) {
+        reviewTiles = restaurantReviews.map((review) => {
+            return (
+                <div key={review.id}>
+                    <ReviewTile
+                        reviewUserId={review.user_id}
+                        title={review.title}
+                        rating={review.rating}
+                        body={review.body}
+                        createdAt={review.created_at}
+                        placeId={review.place_id}
+                        userId={review.user_id}
+                        patronHandle={review.user_handle}
+                    />
+                </div>
+            )
+        })
+    } else {
+        reviewTiles = <div>No experiences yet...</div>
+    }
+    
     
     return (
         <div className="grid-container show-page-margin">
           <div className="grid-x grid-margin-x">
               <div className="cell">
                 <h4 className="header-show-page center-element">{restaurantDetails.name}</h4>
+                <p className="center-element">{restaurantDetails.formatted_address}</p>
+                <p className="center-element">Rating: {restaurantDetails.rating} / 5 from {restaurantDetails.user_ratings_total} reviews on Google</p>
+                <div className="center-element"><a href={restaurantDetails.website}>{restaurantDetails.website}</a></div>
               </div>
-              <div className="cell callout">
+              <div className="cell callout show-page-margin">
                 {reviewTiles}
               </div>
             </div>
