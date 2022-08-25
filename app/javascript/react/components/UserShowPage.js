@@ -37,22 +37,26 @@ const UserShowPage = (props) => {
         return new Date(user.created_at).toDateString()
     }
 
-    const reviewTiles = user.reviews.map((review) => {
-        
-        return (
-            <div key={review.id}>
-                <ReviewTile
-                    reviewUserId={review.user_id}
-                    title={review.title}
-                    rating={review.rating}
-                    body={review.body}
-                    createdAt={review.created_at}
-                    name={review.name}
-                    placeId={review.place_id}
-                />
-            </div>
-        )
-    })
+    let reviewTiles
+    if (user.reviews.length != 0){
+        reviewTiles = user.reviews.map((review) => {
+            return (
+                <div key={review.id}>
+                    <ReviewTile
+                        reviewUserId={review.user_id}
+                        title={review.title}
+                        rating={review.rating}
+                        body={review.body}
+                        createdAt={review.created_at}
+                        name={review.place_name}
+                        placeId={review.place_id}
+                    />
+                </div>
+            )
+        })
+    } else {
+        reviewTiles = <div className="center-element">No experiences yet...</div>
+    }
 
     const userNewReview = () => {
         if (currentUser.id === user.id) {
@@ -63,7 +67,7 @@ const UserShowPage = (props) => {
     } 
 
     return (
-        <div className="grid-container">
+        <div className="grid-container show-page-margin">
           <div className="grid-x grid-margin-x">
               <div className="cell">
                 <h4 className="header-show-page center-element">{user.patron_handle}</h4>

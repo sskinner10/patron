@@ -91,6 +91,10 @@ body {
   margin: .5em 0;
 }
 
+.show-page-margin {
+  margin-top: 1rem;
+}
+
 .title-bar {
   background-color: #db0007;
 }
