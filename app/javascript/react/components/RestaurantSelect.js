@@ -109,8 +109,11 @@ const RestaurantSelect = (props) => {
 
     return (
       <form onSubmit={handleFormSubmit}>
-        <div className="grid-container">
+        <div className="grid-container show-page-margin">
           <div className="grid-x grid-margin-x">
+            <div className="cell">
+              <h4 className="header-show-page center-element">Add a New Experience</h4>
+            </div>
             <div className="cell">
               <ErrorDisplay 
                 errors={errors}
@@ -118,7 +121,7 @@ const RestaurantSelect = (props) => {
             </div>
             <div className="cell">
               <label>Find the restaurant you want to review:
-                <input className="" type="text" name="placeId" id="placeId" ref={inputRef}/>
+                <input className="" type="text" name="placeId" id="placeId"  ref={inputRef}/>
               </label>
             </div>
             <div className="cell">

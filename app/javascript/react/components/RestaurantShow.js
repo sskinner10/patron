@@ -1,43 +1,37 @@
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
-import ReviewTile from "./ReviewTile";
-import { Link } from "react-router-dom";
 
-const UserShowPage = (props) => {
-    const [user, setUser] = useState({})
+import ReviewTile from "./ReviewTile";
+
+const RestaurantShow = (props) => {
+    const [restaurantDetails, setRestaurantDetails] = useState({})
+    const [restaurantReviews, setRestaurantReviews] = useState([])
     const [currentUser, setCurrentUser] = useState({})
 
     useEffect(() =>{
-        fetchUser()
+        fetchRestaurant()
     }, [])
 
-    const fetchUser = async () => {
+    const fetchRestaurant = async () => {
         try {
-            const response = await fetch(`/api/v1/users/${props.match.params.id}`)
+            const response = await fetch(`/api/v1/restaurants/${props.match.params.place_id}`)
             if (!response.ok){
                 const errorMessage = `${response.status} (${response.statusText})`
                 const error = new Error (errorMessage)
                 throw(error)
             }
-            const userObject = await response.json()
-            setUser(userObject.user)
-            if (userObject.user.current_user) {
-                setCurrentUser(userObject.user.current_user)
+            const restaurantObject = await response.json()
+            setRestaurantDetails(restaurantObject.details)
+            setRestaurantReviews(restaurantObject.reviews.reviews)
+            if (restaurantObject.current_user) {
+                setCurrentUser(restaurantObject.current_user)
             }
         } catch (error){
             console.error(`Error in fetch: ${error.message}`)
         }
     }
 
-    if (_.isEmpty(user)) {
-        return null
-    }
-
-    const formatDate = () =>{    
-        return new Date(user.created_at).toDateString()
-    }
-
-    const reviewTiles = user.reviews.map((review) => {
+    const reviewTiles = restaurantReviews.map((review) => {
         
         return (
             <div key={review.id}>
@@ -47,28 +41,19 @@ const UserShowPage = (props) => {
                     rating={review.rating}
                     body={review.body}
                     createdAt={review.created_at}
-                    name={review.name}
                     placeId={review.place_id}
+                    userId={review.user_id}
+                    patronHandle={review.user_handle}
                 />
             </div>
         )
     })
-
-    const userNewReview = () => {
-        if (currentUser.id === user.id) {
-            return (
-                <Link to="/reviews/new">Add a New Experience</Link>
-            )
-        }
-    } 
-
+    
     return (
         <div className="grid-container show-page-margin">
           <div className="grid-x grid-margin-x">
               <div className="cell">
-                <h4 className="header-show-page center-element">{user.patron_handle}</h4>
-                <p className="center-element">Journey started: {formatDate()}</p>
-                <p className="center-element">{userNewReview()}</p>
+                <h4 className="header-show-page center-element">{restaurantDetails.name}</h4>
               </div>
               <div className="cell callout">
                 {reviewTiles}
@@ -78,4 +63,4 @@ const UserShowPage = (props) => {
     )
 }
 
-export default UserShowPage
+export default RestaurantShow
