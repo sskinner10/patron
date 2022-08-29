@@ -81,6 +81,10 @@ body {
   border-radius: .5em;
 }
 
+.restaurant-rec-select {
+  height: 5em;
+}
+
 .review-tile-head {
   display: flex;
   align-items: center;

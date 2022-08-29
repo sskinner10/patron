@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   get "/reviews/new", to: "static_pages#index"
   get "/users/:id", to: "static_pages#index"
+  get "/restaurants/recommendation", to: "static_pages#index"
   get "/restaurants/:place_id", to: "static_pages#index"
 
   resources :homes, only: [:index]
@@ -14,6 +15,8 @@ Rails.application.routes.draw do
       resources :reviews, only: [:create]
       resources :users, only: [:show]
       resources :restaurants, only: [:show]
+      resources :categories, only: [:index]
+      resources :recommendations, only: [:create]
     end
   end
 end
