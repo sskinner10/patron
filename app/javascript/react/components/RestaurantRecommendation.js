@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Redirect } from "react-router-dom";
 
 import DistanceSlider from "./DistanceSlider";
 import ErrorDisplay from "./ErrorDisplay";
@@ -51,18 +52,23 @@ const RestaurantRecommendation = (props) => {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({formPayload})
+            body: JSON.stringify({recommendation: formPayload})
             })
             if (!response.ok) {
             const errorMessage = `${response.status} (${response.status.text})`
             const error = new Error(errorMessage)
             throw(error)
             }
-            const responseBody = await response.json()
-            if (responseBody.user) {
-              setRedirectUser(responseBody.user)
-            } else if (responseBody.error[0] === "You need to be signed in first") {
-              location.assign("/users/sign_in")
+            const recommendation = await response.json()
+            if (recommendation.recommendation) {
+                <Redirect 
+                    to={{
+                        pathname: "/restaurants/your-recommendation",
+                        state: { restaurant: recommendation.recommendation}
+                    }}
+                />
+            } else if (recommendation.error) {
+
             }
         } catch(err) {
           console.log(`Error in fetch: ${err}`)
@@ -80,7 +86,7 @@ const RestaurantRecommendation = (props) => {
     }
 
     const errorGetLocation = (err) => {
-        alert(`Error, please allow browser to find location then refresh page`);
+        alert(`Please allow browser to find location then click 'Get Current Location'. This data is used to help locate local restaurants.`);
     }
 
     const handleGetCoords = (event) => {
@@ -124,7 +130,7 @@ const RestaurantRecommendation = (props) => {
         if (newRecommendation.lat === null && newRecommendation.lon === null) {
             setErrors({
                 ...submitErrors,
-                geolocation: "error, please allow the browser to find your location"
+                geolocation: "error, please click 'Get Current Location'"
             })
             return false
         } else if (_.isEmpty(submitErrors)) {
@@ -162,7 +168,11 @@ const RestaurantRecommendation = (props) => {
             fetchRecommendation(newRecommendation)
             setNewRecommendation(blankRecommendation)
         }
-        
+    }
+
+    let locationFound
+    if (newRecommendation.lat && newRecommendation.lon) {
+        locationFound = "Location retrieved successfully!"
     }
 
     return (
@@ -177,32 +187,35 @@ const RestaurantRecommendation = (props) => {
                 errors={errors}
               />
             </div>
-            <div className="cell">
-              <button className="button" onClick={handleGetCoords}>Get Current Location</button>
+            <div className="cell small-12 medium-6 align-center medium-offset-3 center-element callout">
+              <button className="button radius" onClick={handleGetCoords}>Get Current Location</button>
+              <p>{locationFound}</p>
             </div>
-            <div className="cell">
-              <label>
-                Filter Categories:
-                <input placeholder="Search for a category" onChange={categoriesChangeHandler}/> 
-              </label>
-            </div>
-            <div className="cell">
-              <label>
-                Categories:
-                <select className="restaurant-rec-select" defaultValue={"default"} size={5} onChange={handleCategorySelect}>
-                  <option value="default" disabled>---Select a Category---</option>
-                  {filteredCategories}
-                </select>
-              </label>
-            </div>
-            <div className="cell">
+            <div className="cell small-12 medium-6 align-center medium-offset-3 callout">
+              <div className="center-element">
+                <label>
+                  Filter Categories:
+                  <input placeholder="Search for a category" onChange={categoriesChangeHandler}/> 
+                </label>
+              </div>
+              <div>
+                <label>
+                  Categories:
+                  <select className="restaurant-rec-select" value={newRecommendation.category} size={5} onChange={handleCategorySelect}>
+                    <option value="" disabled>---Select a Category---</option>
+                    {filteredCategories}
+                  </select>
+                </label>
+              </div>
+            </div>  
+            <div className="cell small-12 medium-6 align-center medium-offset-3 center-element callout">
               Distance:
               <DistanceSlider 
                 value={newRecommendation.radius}
                 onChange={handleDistanceChange}
               />
             </div>
-            <div className="cell">
+            <div className="cell small-12 medium-6 align-center medium-offset-3 center-element callout">
               Price Level:
                 <RadioButton 
                   label="$"
@@ -230,7 +243,7 @@ const RestaurantRecommendation = (props) => {
                 />
             </div>
             
-            <input className="cell button" type="submit" value="Get a Recommendation" />
+            <input className="cell small-12 medium-6 align-center medium-offset-3 button radius" type="submit" value="Get a Recommendation" />
           </div>
         </div>
       </form>
