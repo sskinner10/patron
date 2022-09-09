@@ -23,6 +23,7 @@
       </div>
       <div class="top-bar-right">
         <ul class="vertical medium-horizontal menu">
+          <li><%= link_to 'Get a Recommendation', "/restaurants/recommendation", class: "top-bar-text" %></li>
           <%- if current_user -%>
             <li><%= link_to "Profile Page", "/users/#{current_user.id}", class: "top-bar-text" %></li>
             <li><%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: "top-bar-text" %></li>

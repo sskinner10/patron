@@ -1,5 +1,6 @@
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 
 import DistanceSlider from "./DistanceSlider";
 import ErrorDisplay from "./ErrorDisplay";
@@ -18,6 +19,7 @@ const RestaurantRecommendation = (props) => {
     const [allCategories, setAllCategories] = useState([])
     const [filteredCategories, setFilteredCategories] = useState([])
     const [newRecommendation, setNewRecommendation] = useState(blankRecommendation)
+    const [fetchedRecommendation, setFetchedRecommendation] = useState({})
 
     useEffect(() =>{
         fetchCategories()
@@ -60,13 +62,9 @@ const RestaurantRecommendation = (props) => {
             throw(error)
             }
             const recommendation = await response.json()
+
             if (recommendation.recommendation) {
-                <Redirect 
-                    to={{
-                        pathname: "/restaurants/your-recommendation",
-                        state: { restaurant: recommendation.recommendation}
-                    }}
-                />
+                setFetchedRecommendation(recommendation.recommendation)
             } else if (recommendation.error) {
 
             }
@@ -173,6 +171,17 @@ const RestaurantRecommendation = (props) => {
     let locationFound
     if (newRecommendation.lat && newRecommendation.lon) {
         locationFound = "Location retrieved successfully!"
+    }
+
+    if(!_.isEmpty(fetchedRecommendation)){
+        return (
+            <Redirect 
+                to={{
+                    pathname: "/restaurants/your-recommendation",
+                    state: { restaurant: fetchedRecommendation}
+                }}
+            />
+        )
     }
 
     return (
