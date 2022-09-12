@@ -81,6 +81,15 @@ body {
   border-radius: .5em;
 }
 
+.recommendation-image {
+  margin: 1em auto;
+  display: block;
+}
+
+.restaurant-rec-select {
+  height: 5em;
+}
+
 .review-tile-head {
   display: flex;
   align-items: center;
@@ -112,3 +121,6 @@ body {
   font-family: 'Lobster', cursive;
 }
 
+.yelp-url-anchor {
+  word-break: break-all;
+}
