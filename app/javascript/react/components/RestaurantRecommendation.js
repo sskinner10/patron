@@ -20,6 +20,7 @@ const RestaurantRecommendation = (props) => {
     const [filteredCategories, setFilteredCategories] = useState([])
     const [newRecommendation, setNewRecommendation] = useState(blankRecommendation)
     const [fetchedRecommendation, setFetchedRecommendation] = useState({})
+    const [recommendationError, setRecommendationError] = useState(null)
 
     useEffect(() =>{
         fetchCategories()
@@ -65,8 +66,9 @@ const RestaurantRecommendation = (props) => {
 
             if (recommendation.recommendation) {
                 setFetchedRecommendation(recommendation.recommendation)
+                setNewRecommendation(blankRecommendation)
             } else if (recommendation.error) {
-
+              setRecommendationError(recommendation.error)
             }
         } catch(err) {
           console.log(`Error in fetch: ${err}`)
@@ -125,6 +127,7 @@ const RestaurantRecommendation = (props) => {
                 }
             }
         })
+
         if (newRecommendation.lat === null && newRecommendation.lon === null) {
             setErrors({
                 ...submitErrors,
@@ -133,7 +136,8 @@ const RestaurantRecommendation = (props) => {
             return false
         } else if (_.isEmpty(submitErrors)) {
           return true
-        } 
+        }
+
         setErrors(submitErrors)
         return false
     }
@@ -164,14 +168,13 @@ const RestaurantRecommendation = (props) => {
         
         if(validForSubmission()) {
             fetchRecommendation(newRecommendation)
-            setNewRecommendation(blankRecommendation)
         }
     }
 
     let locationFound
     if (newRecommendation.lat && newRecommendation.lon) {
         locationFound = "Location retrieved successfully!"
-    }
+    }    
 
     if(!_.isEmpty(fetchedRecommendation)){
         return (
@@ -194,13 +197,14 @@ const RestaurantRecommendation = (props) => {
             <div className="cell">
               <ErrorDisplay 
                 errors={errors}
+                recommendationError={recommendationError}
               />
             </div>
-            <div className="cell small-12 medium-6 align-center medium-offset-3 center-element callout">
+            <div className="cell small-12 medium-6 align-center medium-offset-3 center-element callout radius shadow">
               <button className="button radius" onClick={handleGetCoords}>Get Current Location</button>
               <p>{locationFound}</p>
             </div>
-            <div className="cell small-12 medium-6 align-center medium-offset-3 callout">
+            <div className="cell small-12 medium-6 align-center medium-offset-3 callout radius shadow">
               <div className="center-element">
                 <label>
                   Filter Categories:
@@ -210,21 +214,21 @@ const RestaurantRecommendation = (props) => {
               <div>
                 <label>
                   Categories:
-                  <select className="restaurant-rec-select" value={newRecommendation.category} size={5} onChange={handleCategorySelect}>
+                  <select className="restaurant-cat-select" value={newRecommendation.category} size={5} onChange={handleCategorySelect}>
                     <option value="" disabled>---Select a Category---</option>
                     {filteredCategories}
                   </select>
                 </label>
               </div>
             </div>  
-            <div className="cell small-12 medium-6 align-center medium-offset-3 center-element callout">
+            <div className="cell small-12 medium-6 align-center medium-offset-3 center-element callout radius shadow">
               Distance:
               <DistanceSlider 
                 value={newRecommendation.radius}
                 onChange={handleDistanceChange}
               />
             </div>
-            <div className="cell small-12 medium-6 align-center medium-offset-3 center-element callout">
+            <div className="cell small-12 medium-6 align-center medium-offset-3 center-element callout radius shadow">
               Price Level:
                 <RadioButton 
                   label="$"
@@ -252,7 +256,7 @@ const RestaurantRecommendation = (props) => {
                 />
             </div>
             
-            <input className="cell small-12 medium-6 align-center medium-offset-3 button radius" type="submit" value="Get a Recommendation" />
+            <input className="cell small-12 medium-6 align-center medium-offset-3 button radius shadow" type="submit" value="Get a Recommendation" />
           </div>
         </div>
       </form>

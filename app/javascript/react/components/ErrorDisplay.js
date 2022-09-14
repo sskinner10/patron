@@ -19,6 +19,14 @@ const ErrorDisplay = (props) => {
           <ul>{listItems}</ul>
         </div>
       )
+    } else if (props.recommendationError) {
+      return (
+        <div className="callout alert">
+          <ul>
+            <li>{props.recommendationError}</li>
+          </ul>
+        </div>
+      )
     } else {
       return ""
     }
