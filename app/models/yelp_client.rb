@@ -21,7 +21,7 @@ class YelpClient
     restaurant_categories = []
 
     all_categories.each do |category|
-      if category["parent_aliases"].include?('restaurants')
+      if category["parent_aliases"].include?('restaurants') || category["parent_aliases"].include?('food')
        restaurant_categories << {alias: category['alias'], title: category['title']}
       end
     end
@@ -43,7 +43,7 @@ class YelpClient
     price = params['price'].to_i
     lat = params['lat']
     lon = params['lon']
-    radius = (params['radius'].to_i * 1609.344).to_i
+    radius = (params['radius'].to_f * 1609.344).to_i
 
     url = URI("https://api.yelp.com/v3/businesses/search?term=#{category}&latitude=#{lat}&longitude=#{lon}&radius=#{radius}&limit=50&open_now=true")
 
